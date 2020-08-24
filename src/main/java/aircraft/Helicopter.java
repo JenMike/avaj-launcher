@@ -1,6 +1,7 @@
 package main.java.aircraft;
 
 import main.java.aircraft.interfaces.Flyable;
+import main.java.handler.Records;
 import main.java.weather.WeatherTower;
 
 import java.util.HashMap;
@@ -24,15 +25,18 @@ public class Helicopter extends Aircraft implements Flyable {
 
     @Override
     public void updateConditions() {
-        String update = this.updateCoordinates(tower.getWeather(this.coordinates), "Balloon");
-        System.out.println("Helicopter#" + this.name + "(" + this.id + "): " + message.get(update));
+        String update = this.updateCoordinates(tower.getWeather(this.coordinates), "Helicopter");
+
+        Records.getAllRecords().addNewData("Helicopter#" + this.name + "(" + this.id + "): " + message.get(update));
+
         if (update.equals("GROUNDED")) {
-            System.out.println("Helicopter#" + this.name + "(" + this.id + "): landing.");
-            System.out.println("Current coordinates: Longitude: [" + this.coordinates.getLongitude()
-                    + "] Latitude: [" + this.coordinates.getLatitude()
-                    + "] Height: [" + this.coordinates.getHeight() + "]");
+            Records.getAllRecords().addNewData("Helicopter#" + this.name + "(" + this.id + "): landing.");
+            Records.getAllRecords().addNewData("Current Coords ::");
+            Records.getAllRecords().addNewData("Longitude :: " + this.coordinates.getLongitude());
+            Records.getAllRecords().addNewData("Latitude :: " + this.coordinates.getLatitude());
+            Records.getAllRecords().addNewData("height :: " + this.coordinates.getHeight());
             this.tower.unregister(this);
-            System.out.println("Tower says: Helicopter#" + this.name + "(" + this.id + ")" + " unregistered from weather tower.");
+            Records.getAllRecords().addNewData("Tower says: Helicopter#" + this.name + "(" + this.id + ")" + " unregistered from weather tower.");
         }
     }
 
@@ -40,6 +44,6 @@ public class Helicopter extends Aircraft implements Flyable {
     public void registerTower(WeatherTower weatherTower) {
         this.tower = weatherTower;
         this.tower.register(this);
-        System.out.println("Tower says: Helicopter#" + this.name + "(" + this.id + ")" + " registered to weather tower.");
+        Records.getAllRecords().addNewData("Tower says: Helicopter#" + this.name + "(" + this.id + ")" + " registered to weather tower.");
     }
 }

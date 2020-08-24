@@ -4,6 +4,7 @@ import main.java.aircraft.AircraftFactory;
 import main.java.aircraft.interfaces.Flyable;
 import main.java.handler.AppException;
 import main.java.handler.Init;
+import main.java.handler.Records;
 import main.java.weather.WeatherTower;
 import main.java.weather.Tower;
 
@@ -12,7 +13,7 @@ import java.util.ConcurrentModificationException;
 
 public class Simulator extends Init {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AppException {
         if (args.length < 1) {
             return;
         }
@@ -22,7 +23,7 @@ public class Simulator extends Init {
         try {
             startSimulation(new File(scenarioFile));
         } catch (AppException e) {
-            System.out.println(e.getMessage());
+            e.getMessage();
             return;
         }
 

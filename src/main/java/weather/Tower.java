@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.aircraft.interfaces.Flyable;
+import main.java.handler.AppException;
+import main.java.handler.Records;
 
 public class Tower {
 
     private final List<Flyable> observers = new ArrayList<>();
 
-    public void changeWeather() {
-        for (Flyable observer : observers) {
-            observer.updateConditions();
+    public void changeWeather() throws AppException {
+        for (int i = 0; i < observers.size(); i++) {
+            observers.get(i).updateConditions();
+            Records.getAllRecords().writeDataToFile();
         }
     }
 

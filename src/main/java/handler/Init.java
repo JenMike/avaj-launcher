@@ -5,11 +5,12 @@ import main.java.weather.WeatherProvider;
 import main.java.weather.WeatherTower;
 
 import java.io.*;
+import java.util.Objects;
 
 public class Init {
 
     public static int cycles;
-    public static AircraftFactory af = new AircraftFactory();
+   // public static AircraftFactory af = new AircraftFactory();
     public static WeatherTower wt = new WeatherTower();
 
     public static void startSimulation(File scenarioFile) throws AppException {
@@ -26,12 +27,11 @@ public class Init {
                     try {
                         cycles = Integer.parseInt(line);
                         if (cycles < 0) {
-                            System.out.println("Error :: File contains a negative integer");
+                            Records.getAllRecords().addNewData("Error :: File contains a negative integer");
                             return;
                         }
                     } catch (NumberFormatException nfe) {
-                        System.out.println("Error :: Line 1 in file must contain only an integer");
-                        throw new AppException(nfe);
+                        throw new AppException(" Line 1 in file must contain only an integer");
                     }
                 else {
                     lines = line.split(" ");
@@ -43,16 +43,15 @@ public class Init {
                         throw new AppException("Error :: line " + line + ": must contain 5 parameters.");
 
                     try {
-                        af.newAircraft(
+                        Objects.requireNonNull(AircraftFactory.newAircraft(
                                 lines[0],
                                 lines[1],
                                 Integer.parseInt(lines[2]),
                                 Integer.parseInt(lines[3]),
                                 Integer.parseInt(lines[4])
-                        ).registerTower(wt);
+                        )).registerTower(wt); //NullPointerException fix (requireNonNull)
                     } catch (Exception e) {
-                        System.out.println("Error: line " + line + ": parameter indices 3, 4 and 5 must be Integers");
-                        throw new AppException(e);
+                        throw new AppException("Error: line " + line + ": parameter indices 3, 4 and 5 must be Integers");
                     }
                 }
                 lineIndex++;
@@ -60,9 +59,9 @@ public class Init {
 
             br.close();
         } catch (Exception e) {
-            System.out.println("Error :: " + e.getMessage());
+            Records.getAllRecords().addNewData("Error :: " + e.getMessage());
             throw new AppException(e);
         }
-
+       // Records.getAllRecords().writeDataToFile();
     }
 }
